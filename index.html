@@ -39,8 +39,14 @@ async function abrir(){
   let k=new Uint8Array(0);
   for(let i=0;k.length<x.length;i++){const b=await sha('clave:'+c+':'+i);const n=new Uint8Array(k.length+b.length);n.set(k);n.set(b,k.length);k=n;}
   const url=new TextDecoder().decode(x.map((v,i)=>v^k[i]));
-  aviso.remove();carta.style.display='block';ajustar();f.src=url;
+  aviso.remove();carta.style.display='block';ajustar();direccion=url;cargar();
 }
+// Pide la carta a Canva otra vez (con un número nuevo para que no salga una copia vieja).
+let direccion='',ultima=0;
+function cargar(){if(!direccion)return;f.src=direccion.replace('#','&r='+Date.now()+'#');ultima=Date.now();}
+// Al volver a una pestaña que ya estaba abierta, se recarga para mostrar lo último.
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-ultima>3000)cargar();});
+addEventListener('pageshow',e=>{if(e.persisted)cargar();});
 addEventListener('resize',ajustar);
 addEventListener('hashchange',()=>location.reload());
 for(const ev of ['touchmove','wheel','keydown','contextmenu'])addEventListener(ev,e=>{if(ev!=='touchmove'||e.touches.length<2)e.preventDefault();},{passive:false});
