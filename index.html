@@ -42,6 +42,7 @@ async function abrir(){
   aviso.remove();carta.style.display='block';ajustar();f.src=url;
 }
 addEventListener('resize',ajustar);
+addEventListener('hashchange',()=>location.reload());
 for(const ev of ['touchmove','wheel','keydown','contextmenu'])addEventListener(ev,e=>{if(ev!=='touchmove'||e.touches.length<2)e.preventDefault();},{passive:false});
 abrir().catch(()=>{aviso.textContent='No se pudo abrir la carta. Vuelve a escanear el código.';});
 </script>
